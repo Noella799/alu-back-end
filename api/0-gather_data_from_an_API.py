@@ -1,73 +1,58 @@
-#!/usr/bin/python3
-<<<<<<< HEAD
+ther data from an API about an employee's TODO list progress
 """
-using a REST API, and a given emp_ID, return info about their TODO list.
-"""
-=======
-""" just using some extra modules """
->>>>>>> d4948aad6b46cb3aab0a950d21497d0c255858e3
+
 import requests
 import sys
 
 
-<<<<<<< HEAD
-if __name__ == "__main__":
-    """ main section """
-    BASE_URL = 'https://jsonplaceholder.typicode.com'
-    employee = requests.get(
-        BASE_URL + f'/users/{sys.argv[1]}/').json()
-    EMPLOYEE_NAME = employee.get("name")
-    employee_todos = requests.get(
-        BASE_URL + f'/users/{sys.argv[1]}/todos').json()
-    serialized_todos = {}
+def main():
+    """Main function to execute the script"""
+    if len(sys.argv) != 2:
+        print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
+        sys.exit(1)
+    
+    try:
+        employee_id = int(sys.argv[1])
+    except ValueError:
+        print("Employee ID must be an integer")
+        sys.exit(1)
+    
+    # Base URL for the API
+    base_url = "https://jsonplaceholder.typicode.com"
+    
+    try:
+        # Get employee details
+        user_response = requests.get(f"{base_url}/users/{employee_id}")
+        user_response.raise_for_status()
+        user_data = user_response.json()
+        employee_name = user_data.get('name')
+        
+        # Get employee TODO list
+        todos_response = requests.get(f"{base_url}/users/{employee_id}/todos")
+        todos_response.raise_for_status()
+        todos_data = todos_response.json()
+        
+        # Calculate progress
+        total_tasks = len(todos_data)
+        completed_tasks = []
+        
+        for task in todos_data:
+            if task.get('completed'):
+                completed_tasks.append(task)
+        
+        num_completed_tasks = len(completed_tasks)
+        
+        # Display progress in required format
+        print(f"Employee {employee_name} is done with tasks({num_completed_tasks}/{total_tasks}):")
+        
+        # Display completed task titles
+        for task in completed_tasks:
+            print(f"\t {task.get('title')}")
+            
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data from API: {e}")
+        sys.exit(1)
 
-    for todo in employee_todos:
-        serialized_todos.update({todo.get("title"): todo.get("completed")})
-
-    COMPLETED_LEN = len([k for k, v in serialized_todos.items() if v is True])
-    print("Employee {} is done with tasks({}/{}):".format(
-        EMPLOYEE_NAME, COMPLETED_LEN, len(serialized_todos)))
-    for key, val in serialized_todos.items():
-        if val is True:
-            print("\t {}".format(key))
-=======
-def getName():
-    """ getting user name """
-    payload = {'id': sys.argv[1]}
-    dataTwo = requests.get('https://jsonplaceholder.typicode.com/users',
-                           params=payload)
-    JDataTwo = dataTwo.json()
-    # print(JDataTwo[0]['name']
-    return JDataTwo[0]['name']
-
-
-def getTask():
-    """ get task numbers and todos done  """
-    data = requests.get('https://jsonplaceholder.typicode.com/todos')
-    ToDoList = []
-    taskToDo = 0
-    taskDone = 0
-    JData = data.json()
-    DataLength = len(JData)
-    for i in range(0, DataLength):
-        com = int(sys.argv[1])
-        if JData[i]['userId'] == com:
-            taskToDo += 1
-            if JData[i]['completed'] is True:
-                ToDoList.append(JData[i]['title'])
-                taskDone += 1
-    # print(taskToDo)
-    # print(taskDone)
-    # print(ToDoList)
-    print("Employee {} is done with tasks({}/{}):"
-          .format(getName(), taskDone, taskToDo))
-    Lvalue = len(ToDoList)
-    for j in range(0, Lvalue):
-        print("\t {}".format(ToDoList[j]))
-
-""" addding docs everywhre """
 
 if __name__ == "__main__":
-    """ calling """
-    getTask()
->>>>>>> d4948aad6b46cb3aab0a950d21497d0c255858e3
+    main()
