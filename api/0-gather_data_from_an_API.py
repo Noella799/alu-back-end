@@ -24,7 +24,7 @@ def get_employee_todo_progress(employee_id):
         None
     """
     base_url = "https://jsonplaceholder.typicode.com"
-    
+
     # Fetch user information
     user_url = "{}/users/{}".format(base_url, employee_id)
     try:
@@ -33,9 +33,9 @@ def get_employee_todo_progress(employee_id):
     except Exception as e:
         print("Error: Unable to fetch user data")
         return
-    
+
     employee_name = user_data.get('name')
-    
+
     # Fetch todos for the user
     todos_url = "{}/todos?userId={}".format(base_url, employee_id)
     try:
@@ -44,16 +44,16 @@ def get_employee_todo_progress(employee_id):
     except Exception as e:
         print("Error: Unable to fetch todos data")
         return
-    
+
     # Calculate progress
     total_tasks = len(todos_data)
     completed_tasks = [task for task in todos_data if task.get('completed')]
     number_of_done_tasks = len(completed_tasks)
-    
+
     # Display results
     print("Employee {} is done with tasks({}/{}):".format(
         employee_name, number_of_done_tasks, total_tasks))
-    
+
     # Display completed task titles
     for task in completed_tasks:
         print("\t {}".format(task.get('title')))
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
         sys.exit(1)
-    
+
     try:
         employee_id = int(sys.argv[1])
         get_employee_todo_progress(employee_id)
