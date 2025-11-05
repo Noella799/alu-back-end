@@ -2,12 +2,12 @@
 """
 Module 2-export_to_JSON
 
-Exports all tasks of a given employee ID to a JSON file in the
-following format:
+Exports all tasks of a given employee ID to a JSON file in the format:
 
 {
     "<USER_ID>": [
-        {"task": "TASK_TITLE", "completed": COMPLETED_STATUS, "username": "USERNAME"},
+        {"task": "TASK_TITLE", "completed": COMPLETED_STATUS,
+         "username": "USERNAME"},
         ...
     ]
 }
@@ -19,7 +19,6 @@ Usage:
 import json
 import requests
 import sys
-
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -35,7 +34,9 @@ if __name__ == "__main__":
     username = user.get("username")
 
     # Fetch all tasks for the user
-    todos_url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(user_id)
+    todos_url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(
+        user_id
+    )
     response = requests.get(todos_url)
     todos = response.json()
 
