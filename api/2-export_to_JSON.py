@@ -20,6 +20,7 @@ import json
 import requests
 import sys
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: ./2-export_to_JSON.py <employee_id>")
@@ -34,8 +35,8 @@ if __name__ == "__main__":
     username = user.get("username")
 
     # Fetch all tasks for the user
-    todos_url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(
-        user_id
+    todos_url = (
+        "https://jsonplaceholder.typicode.com/users/{}/todos".format(user_id)
     )
     response = requests.get(todos_url)
     todos = response.json()
